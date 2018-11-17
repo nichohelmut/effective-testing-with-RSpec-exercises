@@ -44,6 +44,6 @@ module ExpenseTracker
 
 			expenses = JSON.parse(last_response.body)
 			expect(expenses).to contain_exactly(coffee, zoo)
-			end
+		end
 	end
 end
