@@ -5,6 +5,8 @@ require_relative '../../app/api'
 module ExpenseTracker
 	RSpec.describe 'Expense Tracker API' do
 		include Rack::Test::Methods
+
+		let(:parsed) { JSON.parse(last_response.body) }
 		
 		def app
 			ExpenseTracker::API.new
@@ -14,7 +16,6 @@ module ExpenseTracker
 			post '/expenses', JSON.generate(expense)
 			expect(last_response.status).to eq(200)
 
-			parsed = JSON.parse(last_response.body)
 			expect(parsed).to include('expense_id' => a_kind_of(Integer))
 			expense.merge('id' => parsed['expense_id'])
 		end
@@ -42,8 +43,7 @@ module ExpenseTracker
 			get '/expenses/2017-06-10'
 			expect(last_response.status).to eq(200)
 
-			expenses = JSON.parse(last_response.body)
-			expect(expenses).to contain_exactly(coffee, zoo)
+			expect(parsed).to contain_exactly(coffee, zoo)
 		end
 	end
 end
